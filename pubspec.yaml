@@ -27,6 +27,7 @@ flutter:
   assets:
     - assets/tessdata/eng.traineddata
     - assets/tessdata_config.json
+    - assets/logo.png
 
   # fonts:
   #   - family: Schyler
