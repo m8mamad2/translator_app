@@ -36,13 +36,15 @@ Widget translateContainer(BuildContext context,TextEditingController text, bool 
             thumbVisibility: true,
             child: SingleChildScrollView(
               child: TextField(
+                minLines: 4,
+                maxLines: 20,
                 scrollController: scrollController,
                 controller: text,
+                autocorrect: true,
                 onTap: () => text.selection = TextSelection(baseOffset: 0, extentOffset: text.value.text.length),
                 keyboardType: TextInputType.multiline,
                 style:const TextStyle( color: Colors.white ),
-                decoration: const InputDecoration( border: InputBorder.none ),
-                )),
+                decoration: const InputDecoration( border: InputBorder.none ),)),
           )),
         
         Align(

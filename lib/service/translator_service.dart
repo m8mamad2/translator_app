@@ -6,7 +6,7 @@ class TranslatorImageService {
   late TextRecognizer recognizer;
 
   TranslatorImageService() { 
-    recognizer = TextRecognizer(); 
+    recognizer = TextRecognizer(script: TextRecognitionScript.latin); 
   }
 
   void dispose() => recognizer.close();
