@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:translateapp/service/translator_service.dart';
-import 'package:translateapp/utils/color.dart';
-import 'package:translateapp/utils/sized.dart';
-import 'package:translateapp/widgets/bottom_navigation_bar_widget.dart';
-import 'package:translateapp/widgets/translate_contaienr_widget.dart';
 import 'package:translator/translator.dart';
+import 'package:translator_app/service/database_service.dart';
+import 'package:translator_app/service/speack_service.dart';
+import 'package:translator_app/service/speack_to_text_service.dart';
+import 'package:translator_app/service/translator_service.dart';
+import 'package:translator_app/utils/color.dart';
+import 'package:translator_app/utils/sized.dart';
+import 'package:translator_app/widgets/bottom_navigation_bar_widget.dart';
+import 'package:translator_app/widgets/translate_contaienr_widget.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -18,33 +21,28 @@ class MyHomePage extends StatefulWidget {
 }
 class _MyHomePageState extends State<MyHomePage> {
 
-  //* Translation 
   final translator = GoogleTranslator();
-  TextEditingController? translateRes = TextEditingController();
-  
-  //* Image Translation
-  late TranslatorServiceAbs _recognizer;
-  TextEditingController? data = TextEditingController();
-
-  //* Voice
+  final SpeackService speackService = SpeackService();
+  final SpeackToTextService speackToTextService = SpeackToTextService();
+  final TranslatorImageService _recognizer = TranslatorImageService();
   final SpeechToText _speechToText = SpeechToText();
-  final bool _speechEnabled = false;
-
-  //* For Speck
-  FlutterTts flutterTts = FlutterTts();
+  
+  TextEditingController? translateRes = TextEditingController();
+  TextEditingController? inputController = TextEditingController();
+  
 
   @override
   void initState() {
     super.initState();
-    if(!_speechEnabled) _initSpeech();
-    _recognizer = TranslatorService();
-    confing();
+    _initSpeech();
+    speackService.confing();
+    DatabaseService.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    if(_recognizer is TranslatorService) (_recognizer as TranslatorService).dispose();
+    _recognizer.dispose();
   }
 
   //* For Image‍
@@ -54,14 +52,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if(image?.path != null) {
       final recognizedText = await _recognizer.processImage(image!.path);
-      setState(() => data!.text = recognizedText );
+      setState(() => inputController!.text = recognizedText );
     }
 }
 
   //* For Translation 
   void translation()async{
-    if(data != null){
-      Translation res = await translator.translate(data!.text,to: 'fa');
+    if(inputController != null){
+      Translation res = await translator.translate(inputController!.text,from: DatabaseService.getFromValue(),to: DatabaseService.getToValue());
       setState(() => translateRes!.text = res.text );
     }
   }
@@ -73,12 +71,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void _initSpeech()async => await _speechToText.initialize();
   void _startListening() async {
     await _speechToText.listen(
-      onResult: (result) => setState(()=> data!.text = result.recognizedWords ),
+      onResult: (result) => setState(()=> inputController!.text = result.recognizedWords ),
       listenFor: const Duration(seconds: 30),
-      localeId: "en_En",
-      cancelOnError: false,
-      partialResults: false,
-      listenMode: ListenMode.confirmation,
+      listenOptions: SpeechListenOptions(
+        cancelOnError: false,
+        partialResults: false,
+        listenMode: ListenMode.confirmation,
+      ),
     );
     setState(() {});
   }
@@ -87,13 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
-  //* For Speck 
-  Future confing()async{
-    await flutterTts.setLanguage('en-US');
-    await flutterTts.setSpeechRate(1.0);
-    await flutterTts.setVolume(1.0);
-  }
-  Future startSpeak(String text) async => await flutterTts.speak(text);
   
   @override
   Widget build(BuildContext context) {
@@ -111,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: [
               
-              translateContainer(context, data! ,true,()=>deleteData(data!),translation,startSpeak),
+              translateContainer(context, inputController! ,true,()=>deleteData(inputController!), translation, speackService.startSpeak),
               SizedBox(height: kHeight(context)*0.01,),
               translateContainer(context, translateRes! ,false,()=>deleteData(translateRes!)),
 
@@ -119,8 +111,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       )
+      
     );
   }
+
 }
 
 

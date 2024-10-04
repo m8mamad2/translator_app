@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:translateapp/utils/color.dart';
-import 'package:translateapp/utils/sized.dart';
+import 'package:translator_app/utils/color.dart';
+import 'package:translator_app/utils/sized.dart';
 
 
 

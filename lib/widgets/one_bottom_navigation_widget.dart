@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:translateapp/utils/color.dart';
-import 'package:translateapp/utils/sized.dart';
+import 'package:translator_app/utils/color.dart';
+import 'package:translator_app/utils/sized.dart';
 
 Widget oneBottomNavigationBarItem(BuildContext context,IconData icon, String title,VoidCallback onPress,bool isTranslation)=> InkWell(
   onTap: onPress,

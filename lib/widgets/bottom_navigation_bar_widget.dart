@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 // import 'package:flutter_tesseract_ocr/android_ios.dart';
-import 'package:translateapp/utils/color.dart';
-import 'package:translateapp/utils/sized.dart';
-import 'package:translateapp/widgets/one_bottom_navigation_widget.dart';
+import 'package:translator_app/utils/color.dart';
+import 'package:translator_app/utils/sized.dart';
+import 'package:translator_app/widgets/one_bottom_navigation_widget.dart';
 
 
 Widget bottomNaviationBarWidget(BuildContext context,bool isNotSpeching,VoidCallback startListening,VoidCallback stopListening,[VoidCallback? imageTranslateOnPress, ])=> Padding(

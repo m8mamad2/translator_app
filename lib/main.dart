@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:translateapp/home.dart';
-import 'package:translateapp/utils/color.dart';
+import 'package:translator_app/home.dart';
+import 'package:translator_app/utils/color.dart';
 
 void main() => runApp(const MyApp());
 
