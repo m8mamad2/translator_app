@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:translator_app/screen/chat_screen.dart';
 // import 'package:flutter_tesseract_ocr/android_ios.dart';
 import 'package:translator_app/utils/color.dart';
 import 'package:translator_app/utils/sized.dart';
@@ -28,7 +29,7 @@ Widget bottomNaviationBarWidget(BuildContext context,bool isNotSpeching,VoidCall
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              oneBottomNavigationBarItem(context,Icons.transcribe,'Translation',(){},true),
+              oneBottomNavigationBarItem(context,Icons.chat,'AI',()=> Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const ChatWidget(apiKey: "AIzaSyDROHP_KRScSx_zE48wE8Ae9b7HZuXa7CE",))),true),
               oneBottomNavigationBarItem(context,Icons.image,'Image',imageTranslateOnPress!,true),
             ],
           ),
